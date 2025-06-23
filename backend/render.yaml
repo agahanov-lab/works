@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: dark-math-horizon-api
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: PORT
+        value: 8080
+      - key: CORS_ORIGIN
+        sync: false

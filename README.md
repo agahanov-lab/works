@@ -9,6 +9,29 @@ Before you begin, ensure you have the following installed:
 - MongoDB Community Server
 - Git
 
+## Quick Start (After Reopening)
+
+1. Start MongoDB (if not running):
+   - Open Services (Windows + R, type "services.msc")
+   - Find "MongoDB" and make sure it's running
+   - Or run MongoDB manually: `mongod`
+
+2. Start the backend server:
+```bash
+cd backend
+node server.js
+```
+
+3. In a new terminal, start the frontend:
+```bash
+cd dark-math-horizon  # if not already in the project folder
+npm run dev
+```
+
+The application will be available at:
+- Frontend: http://localhost:5173
+- Backend: http://localhost:5000
+
 ## Getting Started
 
 ### 1. Clone the Repository
