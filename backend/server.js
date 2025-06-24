@@ -24,6 +24,15 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// API Health Check
+app.get('/api', (req, res) => {
+  res.json({ 
+    status: 'ok',
+    message: 'Dark Math Horizon API is running',
+    endpoints: ['/api/projects', '/api/math-topics', '/api/algorithms', '/api/resume']
+  });
+});
+
 // Serve uploaded files
 app.use('/api/uploads', express.static('uploads'));
 
