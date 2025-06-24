@@ -24,11 +24,18 @@ app.use(cors({
 }));
 app.use(express.json());
 
+// Basic route to check if server is running
+app.get('/', (req, res) => {
+  res.json({ message: 'Server is running' });
+});
+
 // API Health Check
 app.get('/api', (req, res) => {
+  const mongoStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
   res.json({ 
     status: 'ok',
     message: 'Dark Math Horizon API is running',
+    mongoDb: mongoStatus,
     endpoints: ['/api/projects', '/api/math-topics', '/api/algorithms', '/api/resume']
   });
 });
@@ -40,6 +47,7 @@ app.use('/api/uploads', express.static('uploads'));
 app.use('/api/resume', resumeRoutes);
 
 // Connect to MongoDB
+console.log('Attempting to connect to MongoDB...');
 mongoose.connect(process.env.MONGODB_URI, {
   serverSelectionTimeoutMS: 30000,
   socketTimeoutMS: 60000,
@@ -47,8 +55,13 @@ mongoose.connect(process.env.MONGODB_URI, {
   retryWrites: true,
   w: 'majority'
 })
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('Could not connect to MongoDB:', err));
+  .then(() => {
+    console.log('Successfully connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('MongoDB connection error:', err);
+    console.error('MongoDB URI:', process.env.MONGODB_URI ? 'URI is set' : 'URI is missing');
+  });
 
 // Routes for Projects
 app.get('/api/projects', async (req, res) => {
