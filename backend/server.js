@@ -48,12 +48,32 @@ app.use('/api/resume', resumeRoutes);
 
 // Connect to MongoDB
 console.log('Attempting to connect to MongoDB...');
+
+// Add MongoDB connection error handling
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+});
+
+mongoose.connection.on('connected', () => {
+  console.log('MongoDB connected successfully');
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.log('MongoDB disconnected');
+});
+
+process.on('SIGINT', async () => {
+  await mongoose.connection.close();
+  process.exit(0);
+});
+
 mongoose.connect(process.env.MONGODB_URI, {
   serverSelectionTimeoutMS: 30000,
   socketTimeoutMS: 60000,
   connectTimeoutMS: 30000,
   retryWrites: true,
-  w: 'majority'
+  w: 'majority',
+  dbName: 'dark-math-horizon' // Explicitly set database name
 })
   .then(() => {
     console.log('Successfully connected to MongoDB');
