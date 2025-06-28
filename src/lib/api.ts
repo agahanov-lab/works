@@ -28,14 +28,23 @@ declare global {
 }
 
 const API_URL = (() => {
-  const url = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  console.log('API_URL:', url);
-  console.log('Environment:', {
-    VITE_API_URL: import.meta.env.VITE_API_URL,
-    mode: import.meta.env.MODE,
-    prod: import.meta.env.PROD,
-    dev: import.meta.env.DEV
+  // Try different ways to get the API URL
+  const url = import.meta.env.VITE_API_URL || 
+              process.env.VITE_API_URL || 
+              'https://dark-math-horizon-api.onrender.com/api';
+              
+  console.log('API URL Resolution:', {
+    fromImportMeta: import.meta.env.VITE_API_URL,
+    fromProcess: process.env.VITE_API_URL,
+    finalUrl: url,
+    environment: import.meta.env.MODE,
+    isProduction: import.meta.env.PROD
   });
+  
+  if (import.meta.env.PROD && url.includes('localhost')) {
+    console.warn('Warning: Using localhost in production environment');
+  }
+  
   return url;
 })();
 
@@ -58,13 +67,27 @@ export const api = {
   },
 
   async deleteProject(id: string): Promise<{ message: string }> {
-    const response = await fetch(`${API_URL}/projects/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to delete project');
+    console.log('Deleting project with ID:', id);
+    console.log('Using API URL:', `${API_URL}/projects/${id}`);
+    try {
+      const response = await fetch(`${API_URL}/projects/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log('Delete response status:', response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Delete failed:', errorText);
+        throw new Error(`Failed to delete project: ${errorText}`);
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Delete error:', error);
+      throw error;
     }
-    return response.json();
   },
 
   // Math Topics
