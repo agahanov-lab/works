@@ -28,26 +28,32 @@ declare global {
 }
 
 const API_URL = (() => {
-  // Always use the production URL in production mode
-  const isProduction = import.meta.env.PROD;
-  const url = isProduction
-    ? 'https://dark-math-horizon-api.onrender.com/api'
-    : 'http://localhost:5000/api';
-
-  console.log('API URL Resolution:', {
-    isProduction,
-    url,
-    mode: import.meta.env.MODE
-  });
-
+  const url = 'https://dark-math-horizon-api.onrender.com/api';
+  
+  console.log('Using API URL:', url);
+  
   return url;
 })();
 
 export const api = {
   // Projects
   async getProjects(): Promise<Project[]> {
-    const response = await fetch(`${API_URL}/projects`);
-    return response.json();
+    console.log('Fetching projects from:', `${API_URL}/projects`);
+    try {
+      const response = await fetch(`${API_URL}/projects`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+      console.log('Projects response status:', response.status);
+      const data = await response.json();
+      console.log('Projects data:', data);
+      return data;
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+      throw error;
+    }
   },
 
   async createProject(project: Omit<Project, '_id'>): Promise<Project> {
@@ -69,11 +75,8 @@ export const api = {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Origin': window.location.origin
-        },
-        mode: 'cors',
-        credentials: 'include'
+          'Content-Type': 'application/json'
+        }
       });
       console.log('Delete response status:', response.status);
       if (!response.ok) {
