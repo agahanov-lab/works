@@ -75,7 +75,10 @@ export const api = {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+          'Origin': window.location.origin
         },
+        mode: 'cors',
+        credentials: 'include'
       });
       console.log('Delete response status:', response.status);
       if (!response.ok) {
@@ -108,13 +111,30 @@ export const api = {
   },
 
   async deleteMathTopic(id: string): Promise<{ message: string }> {
-    const response = await fetch(`${API_URL}/math-topics/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to delete math topic');
+    console.log('Deleting math topic with ID:', id);
+    console.log('Using API URL:', `${API_URL}/math-topics/${id}`);
+    try {
+      const response = await fetch(`${API_URL}/math-topics/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Origin': window.location.origin
+        },
+        mode: 'cors',
+        credentials: 'include'
+      });
+      console.log('Delete response status:', response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Delete failed:', errorText);
+        throw new Error(`Failed to delete math topic: ${errorText}`);
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Delete error:', error);
+      throw error;
     }
-    return response.json();
   },
 
   // Algorithms
@@ -135,13 +155,30 @@ export const api = {
   },
 
   async deleteAlgorithm(id: string): Promise<{ message: string }> {
-    const response = await fetch(`${API_URL}/algorithms/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) {
-      throw new Error('Failed to delete algorithm');
+    console.log('Deleting algorithm with ID:', id);
+    console.log('Using API URL:', `${API_URL}/algorithms/${id}`);
+    try {
+      const response = await fetch(`${API_URL}/algorithms/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Origin': window.location.origin
+        },
+        mode: 'cors',
+        credentials: 'include'
+      });
+      console.log('Delete response status:', response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Delete failed:', errorText);
+        throw new Error(`Failed to delete algorithm: ${errorText}`);
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Delete error:', error);
+      throw error;
     }
-    return response.json();
   },
 
   // Resume Operations
@@ -159,10 +196,30 @@ export const api = {
   },
 
   async deleteResume() {
-    const response = await fetch(`${API_URL}/resume/current`, {
-      method: 'DELETE',
-    });
-    return response.json();
+    console.log('Deleting current resume');
+    console.log('Using API URL:', `${API_URL}/resume/current`);
+    try {
+      const response = await fetch(`${API_URL}/resume/current`, {
+        method: 'DELETE',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Origin': window.location.origin
+        },
+        mode: 'cors',
+        credentials: 'include'
+      });
+      console.log('Delete response status:', response.status);
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Delete failed:', errorText);
+        throw new Error(`Failed to delete resume: ${errorText}`);
+      }
+      return response.json();
+    } catch (error) {
+      console.error('Delete error:', error);
+      throw error;
+    }
   },
 
   getResumeDownloadUrl() {
