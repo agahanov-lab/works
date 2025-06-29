@@ -28,23 +28,18 @@ declare global {
 }
 
 const API_URL = (() => {
-  // Try different ways to get the API URL
-  const url = import.meta.env.VITE_API_URL || 
-              process.env.VITE_API_URL || 
-              'https://dark-math-horizon-api.onrender.com/api';
-              
+  // Always use the production URL in production mode
+  const isProduction = import.meta.env.PROD;
+  const url = isProduction
+    ? 'https://dark-math-horizon-api.onrender.com/api'
+    : 'http://localhost:5000/api';
+
   console.log('API URL Resolution:', {
-    fromImportMeta: import.meta.env.VITE_API_URL,
-    fromProcess: process.env.VITE_API_URL,
-    finalUrl: url,
-    environment: import.meta.env.MODE,
-    isProduction: import.meta.env.PROD
+    isProduction,
+    url,
+    mode: import.meta.env.MODE
   });
-  
-  if (import.meta.env.PROD && url.includes('localhost')) {
-    console.warn('Warning: Using localhost in production environment');
-  }
-  
+
   return url;
 })();
 

@@ -13,7 +13,11 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
     host: true
   },
+  build: {
+    sourcemap: true
+  },
   define: {
-    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL)
+    __PROD__: mode === 'production',
+    'process.env.NODE_ENV': JSON.stringify(mode)
   }
 }));
