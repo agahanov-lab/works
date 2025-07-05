@@ -28,12 +28,18 @@ const ResumeUploader = () => {
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
-    if (selectedFile && selectedFile.type === 'application/pdf') {
+    const validTypes = [
+      'application/pdf',                     // PDF
+      'application/msword',                  // .doc
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
+    ];
+
+    if (selectedFile && validTypes.includes(selectedFile.type)) {
       setFile(selectedFile);
       setError('');
     } else {
       setFile(null);
-      setError('Please select a PDF file');
+      setError('Please select a PDF or Word document (.pdf, .doc, or .docx)');
     }
   };
 
@@ -97,7 +103,7 @@ const ResumeUploader = () => {
       <div className="flex gap-4">
         <Input
           type="file"
-          accept=".pdf"
+          accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
           onChange={handleFileChange}
           className="flex-1"
         />

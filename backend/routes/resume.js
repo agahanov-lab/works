@@ -26,15 +26,21 @@ const storage = multer.diskStorage({
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
-    // Allow only PDF files
-    if (file.mimetype === 'application/pdf') {
+    // Allow PDF and Word documents
+    const validMimeTypes = [
+      'application/pdf',                     // PDF
+      'application/msword',                  // .doc
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
+    ];
+    
+    if (validMimeTypes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error('Only PDF files are allowed!'), false);
+      cb(new Error('Only PDF and Word documents (.pdf, .doc, .docx) are allowed!'), false);
     }
   },
   limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
+    fileSize: 10 * 1024 * 1024 // 10MB limit (increased for Word docs)
   }
 });
 

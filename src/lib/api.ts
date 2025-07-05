@@ -186,10 +186,31 @@ export const api = {
   },
 
   async uploadResume(formData) {
+    // Add client-side file type validation before upload
+    const file = formData.get('resume');
+    if (file) {
+      const fileType = file.type;
+      const validTypes = [
+        'application/pdf',                     // PDF files
+        'application/msword',                  // .doc
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document' // .docx
+      ];
+      
+      if (!validTypes.includes(fileType)) {
+        throw new Error('Invalid file type. Please upload a PDF or Word document (.pdf, .doc, or .docx)');
+      }
+    }
+
     const response = await fetch(`${API_URL}/resume/upload`, {
       method: 'POST',
       body: formData, // FormData handles its own Content-Type header
     });
+    
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(error || 'Failed to upload resume');
+    }
+    
     return response.json();
   },
 
