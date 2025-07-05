@@ -68,10 +68,12 @@ export const api = {
   },
 
   async deleteProject(id: string): Promise<{ message: string }> {
+    // Force using production API URL
+    const apiUrl = 'https://dark-math-horizon-api.onrender.com/api';
     console.log('Deleting project with ID:', id);
-    console.log('Using API URL:', `${API_URL}/projects/${id}`);
+    console.log('Using API URL:', `${apiUrl}/projects/${id}`);
     try {
-      const response = await fetch(`${API_URL}/projects/${id}`, {
+      const response = await fetch(`${apiUrl}/projects/${id}`, {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',
@@ -109,18 +111,17 @@ export const api = {
   },
 
   async deleteMathTopic(id: string): Promise<{ message: string }> {
+    // Force using production API URL
+    const apiUrl = 'https://dark-math-horizon-api.onrender.com/api';
     console.log('Deleting math topic with ID:', id);
-    console.log('Using API URL:', `${API_URL}/math-topics/${id}`);
+    console.log('Using API URL:', `${apiUrl}/math-topics/${id}`);
     try {
-      const response = await fetch(`${API_URL}/math-topics/${id}`, {
+      const response = await fetch(`${apiUrl}/math-topics/${id}`, {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Origin': window.location.origin
-        },
-        mode: 'cors',
-        credentials: 'include'
+          'Content-Type': 'application/json'
+        }
       });
       console.log('Delete response status:', response.status);
       if (!response.ok) {
@@ -153,18 +154,17 @@ export const api = {
   },
 
   async deleteAlgorithm(id: string): Promise<{ message: string }> {
+    // Force using production API URL
+    const apiUrl = 'https://dark-math-horizon-api.onrender.com/api';
     console.log('Deleting algorithm with ID:', id);
-    console.log('Using API URL:', `${API_URL}/algorithms/${id}`);
+    console.log('Using API URL:', `${apiUrl}/algorithms/${id}`);
     try {
-      const response = await fetch(`${API_URL}/algorithms/${id}`, {
+      const response = await fetch(`${apiUrl}/algorithms/${id}`, {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Origin': window.location.origin
-        },
-        mode: 'cors',
-        credentials: 'include'
+          'Content-Type': 'application/json'
+        }
       });
       console.log('Delete response status:', response.status);
       if (!response.ok) {
@@ -215,18 +215,17 @@ export const api = {
   },
 
   async deleteResume() {
+    // Force using production API URL
+    const apiUrl = 'https://dark-math-horizon-api.onrender.com/api';
     console.log('Deleting current resume');
-    console.log('Using API URL:', `${API_URL}/resume/current`);
+    console.log('Using API URL:', `${apiUrl}/resume/current`);
     try {
-      const response = await fetch(`${API_URL}/resume/current`, {
+      const response = await fetch(`${apiUrl}/resume/current`, {
         method: 'DELETE',
         headers: {
           'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Origin': window.location.origin
-        },
-        mode: 'cors',
-        credentials: 'include'
+          'Content-Type': 'application/json'
+        }
       });
       console.log('Delete response status:', response.status);
       if (!response.ok) {
